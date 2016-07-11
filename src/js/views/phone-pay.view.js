@@ -74,6 +74,14 @@ define([
           // Filter non-digits from input value by keycode
           $elem.keydown(function(e) {
 
+            // enable f1, f2, f3 e.t.c
+            if(e.keyCode == 112 || e.keyCode == 113 || e.keyCode == 114
+              || e.keyCode == 115 || e.keyCode == 116 || e.keyCode == 117
+              || e.keyCode == 118 || e.keyCode == 119 || e.keyCode == 120
+              || e.keyCode == 121 || e.keyCode == 122 || e.keyCode ==123) {
+              return;
+            }
+
             if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110]) !== -1 ||
               (e.keyCode == 65 && ( e.ctrlKey === true || e.metaKey === true ) ) ||
               (e.keyCode == 67 && e.ctrlKey === true) ||
@@ -172,7 +180,7 @@ define([
       transitionsByKeys: function($elem, $nextElem, $prevElem, inputLenght) {
 
         /**
-         * Listen certain buttons for switch between inputs
+         * Listen certain buttons (arrows, backspase, space) for switch between inputs
          *
          * @param {$elem} - jquery element for transitions
          * @param {$nextElem} - jquery next element for focus
@@ -189,6 +197,7 @@ define([
 
         // previous element focus by backspace
         $elem.keydown(function(e) {
+          console.log(e.keyCode);
           prevValue = this.value;
         });
 
@@ -214,22 +223,28 @@ define([
 
           // move forward on press space-button
           if(e.keyCode == space) {
+
             if($nextElem) {
                 $nextElem.focus();
             }
+
           }
 
           // move forward on press forward-arrow
           if(e.keyCode == forwardArrow) {
+
               if(getCaretPosition($elem.get(0)) != inputLenght) {
                   moveForward = false;
               }
+
           }
 
           if(e.keyCode == forwardArrow && moveForward) {
+
               $nextElem.focus();
               moveForward = false;
               moveBack = false;
+
           }
 
           if(e.keyCode == forwardArrow && getCaretPosition($elem.get(0)) == inputLenght) {
@@ -239,22 +254,24 @@ define([
           // move back on press back-arrow
 
           if(e.keyCode == backArrow) {
+
               if(getCaretPosition($elem.get(0)) != 0) {
                   moveBack = false;
               }
+
           }
 
           if(e.keyCode == backArrow && moveBack) {
+
             if($prevElem) {
                 setCaretPosition($prevElem.get(0), $prevElem.val().length);
             }
+
             moveBack = false;
+
           }
 
           if(e.keyCode == backArrow && getCaretPosition($elem.get(0)) == 0) {
-            if($prevElem) {
-                // setCaretPosition($prevElem.get(0), $prevElem.val().length);
-            }
             moveBack = true;
           }
 
