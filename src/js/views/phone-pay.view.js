@@ -17,12 +17,25 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/phone-pay.template.h
 
       sumChanged: function(e) {
 
-        var input = this.sumInput,
-            value = input.val();
+        var inputSum = this.sumInput,
+            value = inputSum.val();
 
-        this.model.set({sum: input.val()});
-        this.sumCurrency.text(declOfNum(input.val(), ['рубль', 'рубля', 'рублей']));
-        input.val(value.replace(/\B(?=(\d{3})+(?!\d))/g, ' '));
+        this.model.set({ sum: inputSum.val() });
+
+        if (!this.model.isValid()) {
+
+          var sum = inputSum.val();
+
+          inputSum.val(sum.substring(0, sum.length - 1));
+          this.model.set({ sum: inputSum.val() });
+
+        } else {
+
+          inputSum.val(value.replace(/\B(?=(\d{3})+(?!\d))/g, ' '));
+
+        }
+
+        this.sumCurrency.text(declOfNum(inputSum.val(), ['рубль', 'рубля', 'рублей']));
 
       },
 
@@ -40,15 +53,15 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/phone-pay.template.h
           $elem.keydown(function(e) {
 
             if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110]) !== -1 ||
-                (e.keyCode == 65 && ( e.ctrlKey === true || e.metaKey === true ) ) ||
-                (e.keyCode == 67 && e.ctrlKey === true) ||
-                (e.keyCode == 86 && e.ctrlKey === true) ||
-                (e.keyCode >= 35 && e.keyCode <= 40)) {
-                     return;
+              (e.keyCode == 65 && ( e.ctrlKey === true || e.metaKey === true ) ) ||
+              (e.keyCode == 67 && e.ctrlKey === true) ||
+              (e.keyCode == 86 && e.ctrlKey === true) ||
+              (e.keyCode >= 35 && e.keyCode <= 40)) {
+                   return;
             }
 
             if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
-                e.preventDefault();
+              e.preventDefault();
             }
 
           });
@@ -57,8 +70,8 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/phone-pay.template.h
           $elem.keyup(function(e) {
 
             if (/\D/g.test(this.value)){
-                 this.value = this.value.replace(/\D/g, '');
-             }
+              this.value = this.value.replace(/\D/g, '');
+            }
 
           });
 
@@ -78,17 +91,21 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/phone-pay.template.h
 
         $elem.keypress(function(e) {
 
-          // limit input-text by $length
-          if(this.value.length === length - 1){
-            $nextElem.focus();
-          }
-
           // if by chance still receive a large number
           if(this.value.length > length - 1) {
 
             this.value = this.value.substring(0, this.value.length);
             return false;
 
+          }
+
+        });
+
+        $elem.keyup(function(e) {
+
+          // limit input-text by $length
+          if(this.value.length === length && $nextElem){
+            $nextElem.focus();
           }
 
         });
