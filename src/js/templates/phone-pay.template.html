@@ -1,0 +1,20 @@
+<!-- begin phone-pay-block -->
+<div class="b-phone-pay">
+  <form method="POST" class="b-phone-pay__form">
+      <div class="b-phone-pay__phone-col">
+        <label for="b-phone-pay__area-code" class="b-phone-pay__label">Номер телефона</label>
+        <div class="b-phone-pay__country-code"><%= countryCode %></div>
+        <span class="b-phone-pay__bordered">
+          <input type="text" placeholder="<%= phoneAreaPlaceholder %>" tabindex="1" name="b-phone-pay__area-code" id="b-phone-pay__area-code" class="b-phone-pay__area-code">
+        </span>
+        <input type="text" placeholder="<%= phonePlaceholder %>" tabindex="2" name="b-phone-pay__phone" id="b-phone-pay__phone" class="b-phone-pay__phone">
+      </div>
+      <div class="b-phone-pay__sum-col pull-right">
+        <label for="b-phone-pay__sum" class="b-phone-pay__label text-left">Сумма пополнения</label>
+        <input type="text" name="b-phone-pay__sum" placeholder="<%= sumPlaseholder %>" tabindex="3" id="b-phone-pay__sum" class="b-phone-pay__sum-input">
+        <span class="b-phone-pay__currency">рублей</span>
+      </div>
+      <button class="b-btn b-btn--blocked" tabindex="4">Продолжить</button>
+  </form>
+</div>
+<!-- end phone-pay-block -->

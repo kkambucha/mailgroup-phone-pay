@@ -12,6 +12,7 @@ var browserSync = require('browser-sync');
 /* server */
 
 gulp.task('serve', function() {
+
   browserSync.init(['*.html'], {
     server: {
       baseDir: 'build',
@@ -30,6 +31,7 @@ gulp.task('serve', function() {
     port: process.env.PORT || "8889",
     open: false
   });
+  
 });
 
 /* main dev-task*/
@@ -39,32 +41,40 @@ gulp.task('dev', ['sass:build-dev', 'js:build-dev', 'html:build-dev', 'watch:bui
 /* sass */
 
 gulp.task('sass:build-dev', function () {
+
   gulp.src('./src/sass/**/*.sass')
     .pipe(sass().on('error', sass.logError))
     .pipe(gulp.dest('./build/css'))
     .pipe(browserSync.stream());
+
 });
 
 /* javascript */
 
 gulp.task('js:build-dev', function () {
+
   gulp.src('./src/js/**/*.js')
     .pipe(gulp.dest('./build/js'))
     .pipe(browserSync.stream());
+
 });
 
 /* html */
 
 gulp.task('html:build-dev', function () {
-    gulp.src('./src/*.html')
+
+    gulp.src('./src/**/*.html')
         .pipe(gulp.dest('./build'))
         .pipe(browserSync.stream());
+
 });
 
 /* dev-watch task */
 
 gulp.task('watch:build-dev', function () {
+
   gulp.watch('./src/sass/**/*.sass', ['sass:build-dev']);
   gulp.watch('./src/js/**/*.js', ['js:build-dev']);
-  gulp.watch('./src/*.html', ['html:build-dev']);
+  gulp.watch('./src/**/*.html', ['html:build-dev']);
+
 });
