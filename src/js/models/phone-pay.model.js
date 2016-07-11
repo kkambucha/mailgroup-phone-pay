@@ -37,8 +37,10 @@ define(['backbone'], function() {
       if(attrs.areaCode) {
 
         if(attrs.areaCode.length < 3) {
+
           isValid = false;
           msg['areaCode'] = 'Введен не верный код';
+          
         }
 
       } else {

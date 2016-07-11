@@ -6,7 +6,6 @@ define([], function() {
   */
   var getCaretPosition = function doGetCaretPosition (oField) {
 
-    // Initialize
     var iCaretPos = 0;
 
     // IE Support

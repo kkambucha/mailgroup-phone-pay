@@ -38,6 +38,9 @@ define([
         var inputSum = this.sumInput,
             value = inputSum.val();
 
+        // remove leading zero
+        value = value.replace(/\b0+/g, '');
+
         this.model.set({ sum: inputSum.val() });
 
         if (this.model.get('sum') > this.model.get('maxSum')) {
@@ -78,11 +81,11 @@ define([
             if(e.keyCode == 112 || e.keyCode == 113 || e.keyCode == 114
               || e.keyCode == 115 || e.keyCode == 116 || e.keyCode == 117
               || e.keyCode == 118 || e.keyCode == 119 || e.keyCode == 120
-              || e.keyCode == 121 || e.keyCode == 122 || e.keyCode ==123) {
+              || e.keyCode == 121 || e.keyCode == 122 || e.keyCode == 123) {
               return;
             }
 
-            if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110]) !== -1 ||
+            if ($.inArray(e.keyCode, [8, 9, 27, 13, 110]) !== -1 ||
               (e.keyCode == 65 && ( e.ctrlKey === true || e.metaKey === true ) ) ||
               (e.keyCode == 67 && e.ctrlKey === true) ||
               (e.keyCode == 86 && e.ctrlKey === true) ||
@@ -197,13 +200,13 @@ define([
 
         // previous element focus by backspace
         $elem.keydown(function(e) {
-          console.log(e.keyCode);
           prevValue = this.value;
         });
 
         $elem.keyup(function(e) {
 
           if(prevValue === '' && e.keyCode == backspace) {
+
             if($prevElem) {
 
               var tmpStr;
@@ -215,6 +218,7 @@ define([
               $prevElem.val(tmpStr);
 
             }
+
           }
 
         });
