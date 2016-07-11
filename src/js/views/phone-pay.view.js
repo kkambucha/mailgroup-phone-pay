@@ -41,8 +41,9 @@ define([
         if (this.model.get('sum') > this.model.get('maxSum')) {
 
           var sum = inputSum.val();
+
           this.showSumWarning();
-          inputSum.val(sum.substring(0, sum.length - 1));
+          inputSum.val(sum.substring(0, sum.length - 1)); // remove last symbol if sum is too large
           this.model.set({ sum: inputSum.val() });
 
         } else {
@@ -59,6 +60,8 @@ define([
       numbersChecking: function() {
 
         /**
+         * Filtering input data on the basis of number
+         *
          * @param {arguments} - jquery elements for number-checking
          */
 
@@ -99,6 +102,8 @@ define([
       lengthChecking: function($elem, length, $nextElem) {
 
         /**
+         * Checking length and fields occupancy
+         *
          * @param {$elem} - jquery element for checking
          * @param {$length} - max length of element content
          * @param {$nextElem} - next element for focus if $elem is complete
@@ -132,6 +137,8 @@ define([
       phoneMasking: function($elem) {
 
         /**
+         * Masking of phone field
+         *
          * @param {$elem} - jquery element for masking
          */
 
@@ -160,6 +167,8 @@ define([
       transitionsByKeys: function($elem, $nextElem, $prevElem) {
 
         /**
+         * Listen certain buttons for switch between inputs
+         *
          * @param {$elem} - jquery element for transitions
          * @param {$nextElem} - jquery next element for focus
          * @param {$prevElem} - jquery previous element for focus
@@ -208,6 +217,15 @@ define([
       },
 
       phonePasting: function($elem, $areaCode, $phoneNumber, $inputSum) {
+
+        /**
+         * Processing of paste events
+         *
+         * @param {$elem} - jquery element for listening
+         * @param {$areaCode} - jquery area-code input
+         * @param {$phoneNumber} - jquery phone-number input
+         * @param {$inputSum} - jquery sum input
+         */
 
         var _this = this;
 
@@ -259,7 +277,7 @@ define([
         setTimeout(function() {
           _this.sumWarning.animate({
             'opacity' : 0
-          }, 300).delay(200).fadeOut();
+          }, 300).delay(400).fadeOut();
         }, 2000);
 
       },
@@ -276,7 +294,7 @@ define([
 
         this.setAreaCodeModel(this.areaCode.val());
         this.setPhoneModel(this.phoneNumber.val());
-        
+
       },
 
       buttonToggle: function() {
@@ -299,6 +317,11 @@ define([
         this.sumCurrency = this.$('.b-phone-pay__currency');
         this.sumWarning = this.$('.b-phone-pay__warning');
         this.sendButton = this.$('.b-btn');
+
+        // delete this block when the backend will be ready
+        this.sendButton.on('click', function(e){
+          e.preventDefault();
+        });
 
         this.lengthChecking(this.areaCode, 3, this.phoneNumber);
         this.lengthChecking(this.phoneNumber, 9, this.sumInput);
