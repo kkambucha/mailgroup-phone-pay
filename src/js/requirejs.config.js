@@ -23,9 +23,9 @@ requirejs.config({
 /* app bootstrap */
 
 require(['app'],
+
     function(phonepayApp) {
-
       new phonepayApp.PhonepayView({model: phonepayApp.PhonePayModel}).render();
-
     }
+
   );

@@ -1,6 +1,17 @@
 'use strict';
 
-define(['jquery', 'underscore', 'backbone', 'text!templates/phone-pay.template.html', 'libs/declofnum', 'libs/phone-mask'], function($, _, Backbone, template, declOfNum, phoneMask) {
+/**
+ * @author Zakovryashin Vadim
+ */
+
+define([
+  'jquery',
+  'underscore',
+  'backbone',
+  'text!templates/phone-pay.template.html',
+  'libs/declofnum',
+  'libs/phone-mask'
+], function($, _, Backbone, template, declOfNum, phoneMask) {
 
   var PhonepayAppView = Backbone.View.extend({
 
@@ -13,6 +24,10 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/phone-pay.template.h
       },
 
       initialize: function () {
+
+        this.listenTo(this.model, 'change', function() {
+          this.buttonToggle();
+        });
 
       },
 
@@ -106,7 +121,7 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/phone-pay.template.h
         $elem.keyup(function(e) {
 
           // limit input-text by $length
-          if(this.value.length === length && $nextElem){
+          if(this.value.length === length && $nextElem) {
             $nextElem.focus();
           }
 
@@ -126,10 +141,11 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/phone-pay.template.h
 
             //remove all chars, except dash and digits
             var value = phoneMask(this.value.replace(/[^\-0-9]/g, ''));
+
             this.value = value;
 
             /* if value pasted */
-            if(e.keyCode == 86 && e.ctrlKey === true){
+            if(e.keyCode == 86 && e.ctrlKey === true) {
               if(value.length > 8){
                 value = value.substring(0, 9);
               }
@@ -163,7 +179,7 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/phone-pay.template.h
         $elem.keyup(function(e) {
 
           if(prevValue === '' && (e.keyCode == backspace || e.keyCode == backArrow)) {
-            if($prevElem){
+            if($prevElem) {
 
               var tmpStr;
 
@@ -203,28 +219,34 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/phone-pay.template.h
                 areaCode,
                 phoneNumber;
 
+            // filter pasted string
             pasteString = this.value.replace(/[^\-0-9]/g, '');
             areaCode = pasteString.substring(0, 3);
             phoneNumber = phoneMask(pasteString.substring(3));
-            console.log(pasteString.substring(3));
-            if(areaCode.length + phoneNumber.length > 10){
+
+            // divide pated string
+            if(areaCode.length + phoneNumber.length > 10) {
+
               phoneNumber = phoneNumber.substring(0, 9);
               $phoneNumber.focus();
               $inputSum.focus();
 
             }
-            if(areaCode.length + phoneNumber.length >= 3 && areaCode.length + phoneNumber.length <= 11){
+
+            if(areaCode.length + phoneNumber.length >= 3 && areaCode.length + phoneNumber.length <= 11) {
               $phoneNumber.focus();
             }
+
             $areaCode.val(areaCode);
             $phoneNumber.val(phoneNumber);
+
           }
 
         });
 
       },
 
-      showSumWarning: function(){
+      showSumWarning: function() {
 
         var _this = this;
 
@@ -234,19 +256,19 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/phone-pay.template.h
           'opacity' : 1
         });
 
-        setTimeout(function(){
+        setTimeout(function() {
           _this.sumWarning.animate({
             'opacity' : 0
-          }, 300).delay(300).fadeOut();
+          }, 300).delay(200).fadeOut();
         }, 2000);
 
       },
 
-      setAreaCodeModel: function(data){
+      setAreaCodeModel: function(data) {
         this.model.set({ areaCode: data.replace(/\D+/g,"") });
       },
 
-      setPhoneModel: function(data){
+      setPhoneModel: function(data) {
         this.model.set({ phoneNumber: data.replace(/\D+/g,"") });
       },
 
@@ -254,6 +276,10 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/phone-pay.template.h
 
         this.setAreaCodeModel(this.areaCode.val());
         this.setPhoneModel(this.phoneNumber.val());
+        
+      },
+
+      buttonToggle: function() {
 
         if(this.model.isValid()) {
           this.sendButton.removeClass('b-btn--blocked');

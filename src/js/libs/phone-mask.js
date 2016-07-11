@@ -1,7 +1,8 @@
 define([], function() {
 
   /**
-   * @param {val} - string for masking by format 000-00-00
+   * @param {val} string for masking by format 000-00-00
+   * @return formated string
    */
 
   var phoneMask = function(val) {

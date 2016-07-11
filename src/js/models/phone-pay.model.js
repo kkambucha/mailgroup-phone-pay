@@ -1,3 +1,5 @@
+'use strict';
+
 define(['backbone'], function() {
 
   var PhonepayPhone = Backbone.Model.extend({
@@ -18,37 +20,51 @@ define(['backbone'], function() {
       var isValid = true,
           msg = [];
 
-      if(attrs.sum > this.defaults.maxSum){
+      if(attrs.sum > this.defaults.maxSum) {
+
         isValid = false;
         msg['sumLimit'] = 'Сумма не может превышать ' + this.defaults.maxSum;
+
       }
 
-      if(attrs.areaCode){
+      if(attrs.areaCode) {
+
         if(attrs.areaCode.length < 3) {
           isValid = false;
           msg['areaCode'] = 'Введен не верный код';
         }
+
       } else {
+
         isValid = false;
         msg['areaCode'] = 'Введен не верный код';
+
       }
 
-      if(attrs.phoneNumber){
+      if(attrs.phoneNumber) {
+
         if(attrs.phoneNumber.length < 7) {
+
           isValid = false;
           msg['phone'] = 'Введен не верный номер телефона';
+
         }
+
       } else {
+
         isValid = false;
         msg['phone'] = 'Введен не верный номер телефона';
+
       }
 
-      if(!attrs.sum){
+      if(!attrs.sum) {
+
         isValid = false;
         msg['sum'] = 'Введена не верная сумма';
+
       }
 
-      if(!isValid){
+      if(!isValid) {
         return msg;
       }
 
