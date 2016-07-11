@@ -121,7 +121,7 @@ define([
 
               this.value = this.value.substring(0, this.value.length);
               return false;
-              
+
             }
 
           }
@@ -185,8 +185,7 @@ define([
             backArrow = 37,
             prevValue,
             moveForward = false,
-            moveBack = true,
-            carretPosition;
+            moveBack = true;
 
         // previous element focus by backspace
         $elem.keydown(function(e) {
@@ -211,13 +210,6 @@ define([
 
         });
 
-        $elem.keydown(function(e) {
-
-          carretPosition = getCaretPosition($elem.get(0));
-          console.log(carretPosition);
-
-        });
-
         $elem.keyup(function(e) {
 
           // move forward on press space-button
@@ -227,10 +219,44 @@ define([
             }
           }
 
-          // forward button
-          // if(e.keyCode == forwardArrow) {
-            // console.log('forward');
-          // }
+          // move forward on press forward-arrow
+          if(e.keyCode == forwardArrow) {
+              if(getCaretPosition($elem.get(0)) != inputLenght) {
+                  moveForward = false;
+              }
+          }
+
+          if(e.keyCode == forwardArrow && moveForward) {
+              $nextElem.focus();
+              moveForward = false;
+              moveBack = false;
+          }
+
+          if(e.keyCode == forwardArrow && getCaretPosition($elem.get(0)) == inputLenght) {
+            moveForward = true;
+          }
+
+          // move back on press back-arrow
+
+          if(e.keyCode == backArrow) {
+              if(getCaretPosition($elem.get(0)) != 0) {
+                  moveBack = false;
+              }
+          }
+
+          if(e.keyCode == backArrow && moveBack) {
+            if($prevElem) {
+                setCaretPosition($prevElem.get(0), $prevElem.val().length);
+            }
+            moveBack = false;
+          }
+
+          if(e.keyCode == backArrow && getCaretPosition($elem.get(0)) == 0) {
+            if($prevElem) {
+                // setCaretPosition($prevElem.get(0), $prevElem.val().length);
+            }
+            moveBack = true;
+          }
 
         });
 
