@@ -10,8 +10,10 @@ define([
   'backbone',
   'text!templates/phone-pay.template.html',
   'libs/declofnum',
-  'libs/phone-mask'
-], function($, _, Backbone, template, declOfNum, phoneMask) {
+  'libs/phone-mask',
+  'libs/getCaretPosition',
+  'libs/setCaretPosition'
+], function($, _, Backbone, template, declOfNum, phoneMask, getCaretPosition, setCaretPosition) {
 
   var PhonepayAppView = Backbone.View.extend({
 
@@ -126,7 +128,7 @@ define([
         $elem.keyup(function(e) {
 
           // limit input-text by $length
-          if(this.value.length === length && $nextElem) {
+          if(this.value.length === length && $nextElem && e.keyCode != 39 && e.keyCode != 37) {
             $nextElem.focus();
           }
 
@@ -164,7 +166,7 @@ define([
 
       },
 
-      transitionsByKeys: function($elem, $nextElem, $prevElem) {
+      transitionsByKeys: function($elem, $nextElem, $prevElem, inputLenght) {
 
         /**
          * Listen certain buttons for switch between inputs
@@ -178,7 +180,9 @@ define([
             space = 32,
             forwardArrow = 39,
             backArrow = 37,
-            prevValue;
+            prevValue,
+            moveForward = false,
+            moveBack = true;
 
         // previous element focus by backspace
         $elem.keydown(function(e) {
@@ -187,7 +191,7 @@ define([
 
         $elem.keyup(function(e) {
 
-          if(prevValue === '' && (e.keyCode == backspace || e.keyCode == backArrow)) {
+          if(prevValue === '' && e.keyCode == backspace) {
             if($prevElem) {
 
               var tmpStr;
@@ -203,13 +207,52 @@ define([
 
         });
 
-        // next element focus by space
         $elem.keyup(function(e) {
 
-          if(e.keyCode == space || e.keyCode == forwardArrow) {
+          // move forward on press space-button
+          if(e.keyCode == space) {
             if($nextElem) {
                 $nextElem.focus();
             }
+          }
+
+          // move forward on press forward-arrow
+          if(e.keyCode == forwardArrow) {
+              if(getCaretPosition($elem.get(0)) != inputLenght) {
+                  moveForward = false;
+              }
+          }
+
+          if(e.keyCode == forwardArrow && moveForward) {
+              $nextElem.focus();
+              moveForward = false;
+              moveBack = false;
+          }
+
+          if(e.keyCode == forwardArrow && getCaretPosition($elem.get(0)) == inputLenght) {
+            moveForward = true;
+          }
+
+          // move back on press back-arrow
+
+          if(e.keyCode == backArrow) {
+              if(getCaretPosition($elem.get(0)) != 0) {
+                  moveBack = false;
+              }
+          }
+
+          if(e.keyCode == backArrow && moveBack) {
+            if($prevElem) {
+                setCaretPosition($prevElem.get(0), $prevElem.val().length);
+            }
+            moveBack = false;
+          }
+
+          if(e.keyCode == backArrow && getCaretPosition($elem.get(0)) == 0) {
+            if($prevElem) {
+                // setCaretPosition($prevElem.get(0), $prevElem.val().length);
+            }
+            moveBack = true;
           }
 
         });
@@ -334,8 +377,8 @@ define([
         this.phonePasting(this.areaCode, this.areaCode, this.phoneNumber, this.sumInput);
         this.phonePasting(this.phoneNumber, this.areaCode, this.phoneNumber, this.sumInput);
 
-        this.transitionsByKeys(this.areaCode, this.phoneNumber, null);
-        this.transitionsByKeys(this.phoneNumber, this.sumInput, this.areaCode);
+        this.transitionsByKeys(this.areaCode, this.phoneNumber, null, 3);
+        this.transitionsByKeys(this.phoneNumber, this.sumInput, this.areaCode, 9);
 
         return this;
 

@@ -27,6 +27,13 @@ define(['backbone'], function() {
 
       }
 
+      if(attrs.sum == 0) {
+
+        isValid = false;
+        msg['sumZero'] = 'Введите сумму';
+
+      }
+
       if(attrs.areaCode) {
 
         if(attrs.areaCode.length < 3) {
