@@ -13,6 +13,7 @@
         <label for="b-phone-pay__sum" class="b-phone-pay__label text-left">Сумма пополнения</label>
         <input type="text" name="b-phone-pay__sum" placeholder="<%= sumPlaseholder %>" tabindex="3" id="b-phone-pay__sum" class="b-phone-pay__sum-input">
         <span class="b-phone-pay__currency">рублей</span>
+        <span class="b-phone-pay__warning">Пожалуйста, введите сумму меньше <%= maxSum %> руб.</span>
       </div>
       <button class="b-btn b-btn--blocked" tabindex="4">Продолжить</button>
   </form>
