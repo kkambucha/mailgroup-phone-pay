@@ -305,6 +305,11 @@ define([
 
         function validatePhoneNumber(context){
 
+          /**
+           /*@param {context} - ancor to this
+           /* result is a separate by inputs string
+           */
+
           setTimeout(function(){
 
             var pasteString,
@@ -331,9 +336,8 @@ define([
 
             $areaCode.val(areaCode);
             $phoneNumber.val(phoneNumber);
-            alert('paste');
 
-          }, 300);
+          }, 100);
 
         }
 
