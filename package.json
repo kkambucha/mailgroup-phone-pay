@@ -4,6 +4,7 @@
   "description": "2016 Zakovryashin Vadim",
   "main": "gulpfile.js",
   "scripts": {
+    "start": "gulp",
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "gulp dev",
     "prod": "gulp prod"

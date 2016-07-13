@@ -31,11 +31,12 @@ gulp.task('serve', function() {
     port: process.env.PORT || "8889",
     open: false
   });
-  
+
 });
 
 /* main dev-task*/
 
+gulp.task('default', ['sass:build-dev', 'js:build-dev', 'html:build-dev', 'watch:build-dev', 'serve']);
 gulp.task('dev', ['sass:build-dev', 'js:build-dev', 'html:build-dev', 'watch:build-dev', 'serve']);
 
 /* sass */
