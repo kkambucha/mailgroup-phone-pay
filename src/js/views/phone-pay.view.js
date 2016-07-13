@@ -93,7 +93,7 @@ define([
                    return;
             }
 
-            if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+            if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105) && (e.keyCode != 39)) {
               e.preventDefault();
             }
 
@@ -296,16 +296,23 @@ define([
 
         var _this = this;
 
-        $elem.keyup(function(e) {
 
-          if(e.keyCode == 86 && e.ctrlKey === true) {
+        $elem.on('paste', function(){
+
+          validatePhoneNumber($elem);
+
+        });
+
+        function validatePhoneNumber(context){
+
+          setTimeout(function(){
 
             var pasteString,
                 areaCode,
                 phoneNumber;
 
             // filter pasted string
-            pasteString = this.value.replace(/[^\-0-9]/g, '');
+            pasteString = context.val().replace(/[^\-0-9]/g, '');
             areaCode = pasteString.substring(0, 3);
             phoneNumber = phoneMask(pasteString.substring(3));
 
@@ -324,10 +331,11 @@ define([
 
             $areaCode.val(areaCode);
             $phoneNumber.val(phoneNumber);
+            alert('paste');
 
-          }
+          }, 300);
 
-        });
+        }
 
       },
 
